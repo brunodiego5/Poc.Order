@@ -30,3 +30,4 @@ Teremos o microserviço *Poc.Order.Api* responsável por receber o pedido, valid
 - Implementar resiliência
 - Implementar **rediness probe**
 - Implementar fila para publicação dos resultados processados (Comunicação assíncrona com sistemas externos)
+- Implementar notificação das validações em application para presentation
