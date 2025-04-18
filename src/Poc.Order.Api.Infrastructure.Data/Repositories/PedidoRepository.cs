@@ -26,5 +26,12 @@ namespace Poc.Order.Api.Infrastructure.Data.Repositories
             var pedidoModel = mapper.Map<PedidoModel>(pedido);
             await collection.InsertOneAsync(pedidoModel);
         }
+
+        public async Task<Pedido> GetPedidoByIdAsync(int id, CancellationToken cancellationToken)
+        {
+            var pedidoModel = await collection.Find(w => w.PedidoId == id).FirstOrDefaultAsync();
+
+            return mapper.Map<Pedido>(pedidoModel);
+        }
     }
 }
