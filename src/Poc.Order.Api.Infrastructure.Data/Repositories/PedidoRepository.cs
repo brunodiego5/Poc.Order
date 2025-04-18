@@ -41,5 +41,15 @@ namespace Poc.Order.Api.Infrastructure.Data.Repositories
 
             return mapper.Map<List<Pedido>>(listPedidoModel);
         }
+
+        public async Task UpdateImpostoPedidoAsync(int id, double imposto, CancellationToken cancellationToken)
+        {
+            var filtro = Builders<PedidoModel>.Filter.Eq(p => p.PedidoId, id);
+            var update = Builders<PedidoModel>.Update
+                .Set(p => p.Imposto, imposto)
+                .Set(p => p.Status, StatusPedido.Concluido);
+
+            await collection.UpdateOneAsync(filtro, update);
+        }
     }
 }

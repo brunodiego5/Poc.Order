@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using Poc.Order.Api.Application.Commands.CreatePedido;
+using Poc.Order.Api.Application.Commands.UpdateImpostoPedido;
 using Poc.Order.Api.Application.Profiles;
 using Poc.Order.Api.Application.Queries.GetOnePedido;
 using Poc.Order.Api.Application.Queries.GetPedidos;
@@ -40,6 +41,7 @@ namespace Poc.Order.Api.IoC
             services.AddScoped<IValidator<CreatePedidoCommand>, CreatePedidoCommandValidator>();
             services.AddScoped<IValidator<GetOnePedidoQuery>, GetOnePedidoQueryValidator>();
             services.AddScoped<IValidator<GetPedidosQuery>, GetPedidosQueryValidator>();
+            services.AddScoped<IValidator<UpdateImpostoPedidoCommand>, UpdateImpostoPedidoCommandValidator>();
         }
 
         private static void RegisterMappers(IServiceCollection services)
