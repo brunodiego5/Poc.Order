@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using Poc.Order.Api.Domain.Entities;
+using Poc.Order.Api.Domain.Enums;
 using Poc.Order.Api.Domain.Interfaces;
 using Poc.Order.Api.Infrastructure.Data.Models;
 
@@ -29,9 +30,16 @@ namespace Poc.Order.Api.Infrastructure.Data.Repositories
 
         public async Task<Pedido> GetPedidoByIdAsync(int id, CancellationToken cancellationToken)
         {
-            var pedidoModel = await collection.Find(w => w.PedidoId == id).FirstOrDefaultAsync();
+            var pedidoModel = await collection.Find(w => w.PedidoId == id).FirstOrDefaultAsync(cancellationToken);
 
             return mapper.Map<Pedido>(pedidoModel);
+        }
+
+        public async Task<IList<Pedido>> GetPedidosByStatusAsync(StatusPedido statusPedido, CancellationToken cancellationToken)
+        {
+            var listPedidoModel = await collection.Find(w => w.Status == statusPedido).ToListAsync(cancellationToken);
+
+            return mapper.Map<List<Pedido>>(listPedidoModel);
         }
     }
 }
