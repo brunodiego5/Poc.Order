@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Poc.Order.Api.Application.Commands.CreatePedido;
 using Poc.Order.Api.Application.Queries.GetOnePedido;
+using Poc.Order.Api.Application.Queries.GetPedidos;
 using Poc.Order.Api.Domain.Enums;
 
 namespace Poc.Order.Api.Controllers
@@ -34,6 +35,17 @@ namespace Poc.Order.Api.Controllers
             var result = await mediator.Send(new GetOnePedidoQuery { PedidoId = id});
 
             if (result is null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetList([FromQuery] StatusPedido status)
+        {
+            var result = await mediator.Send(new GetPedidosQuery { Status = status });
+
+            if (result is null || result?.Count == 0)
                 return NotFound();
 
             return Ok(result);

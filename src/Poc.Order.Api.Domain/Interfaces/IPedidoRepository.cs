@@ -1,4 +1,5 @@
 ﻿using Poc.Order.Api.Domain.Entities;
+using Poc.Order.Api.Domain.Enums;
 
 namespace Poc.Order.Api.Domain.Interfaces
 {
@@ -7,5 +8,7 @@ namespace Poc.Order.Api.Domain.Interfaces
         Task AddPedidoAsync(Pedido pedido, CancellationToken cancellationToken);
 
         Task<Pedido> GetPedidoByIdAsync(int id, CancellationToken cancellationToken);
+
+        Task<IList<Pedido>> GetPedidosByStatusAsync(StatusPedido statusPedido, CancellationToken cancellationToken);
     }
 }
