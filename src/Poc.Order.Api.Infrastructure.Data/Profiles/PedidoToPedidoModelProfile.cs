@@ -19,9 +19,11 @@ namespace Poc.Order.Api.Infrastructure.Data.Profiles
                 .ForMember(dest => dest.Itens, opt => opt.MapFrom(src => src.Itens))
                 .ForMember(dest => dest.Imposto, opt => opt.MapFrom(src => src.Imposto))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
-                .ForMember(dest => dest.Id, opt => opt.Ignore());
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ReverseMap();
 
-            CreateMap<ItemPedido, ItemPedidoModel>();
+            CreateMap<ItemPedido, ItemPedidoModel>()
+                .ReverseMap();
         }
     }
 }
