@@ -11,12 +11,14 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.4" />
     <PackageReference Include="MongoDB.Driver" Version="3.3.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Poc.Order.Api.Application\Poc.Order.Api.Application.csproj" />
     <ProjectReference Include="..\Poc.Order.Api.Domain\Poc.Order.Api.Domain.csproj" />
     <ProjectReference Include="..\Poc.Order.Api.Infrastructure.Data\Poc.Order.Api.Infrastructure.Data.csproj" />
+    <ProjectReference Include="..\Poc.Order.Api.Infrastructure.Publisher\Poc.Order.Api.Infrastructure.Publisher.csproj" />
   </ItemGroup>
 
 </Project>

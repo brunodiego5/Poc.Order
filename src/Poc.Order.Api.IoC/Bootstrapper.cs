@@ -10,6 +10,9 @@ using Poc.Order.Api.Application.Queries.GetPedidos;
 using Poc.Order.Api.Domain.Interfaces;
 using Poc.Order.Api.Infrastructure.Data.Profiles;
 using Poc.Order.Api.Infrastructure.Data.Repositories;
+using Poc.Order.Api.Infrastructure.Publisher.Profiles;
+using Poc.Order.Api.Infrastructure.Publisher.Publishers;
+using RabbitMQ.Client;
 
 namespace Poc.Order.Api.IoC
 {
@@ -22,11 +25,12 @@ namespace Poc.Order.Api.IoC
             RegisterValidators(services);
             RegisterMappers(services);
             RegisterMediatRs(services);
+            RegisterBus(services, configuration);
+            RegisterPublishers(services);
         }
 
         private static void RegisterData(IServiceCollection services, IConfiguration configuration)
         {
-            Console.WriteLine(configuration["MongoDb:ConnectionString"]);
             services.AddSingleton<IMongoClient>(_ =>
                 new MongoClient(configuration["MongoDb:ConnectionString"]));
         }
@@ -48,7 +52,8 @@ namespace Poc.Order.Api.IoC
         {
             services.AddAutoMapper(
                 typeof(CreatePedidoCommandToPedidoProfile).Assembly,
-                typeof(PedidoToPedidoModelProfile).Assembly
+                typeof(PedidoToPedidoModelProfile).Assembly,
+                typeof(PedidoToPedidoMessageProfile).Assembly
             );
         }
 
@@ -58,6 +63,30 @@ namespace Poc.Order.Api.IoC
             {
                 cfg.RegisterServicesFromAssembly(typeof(CreatePedidoCommandHandler).Assembly);
             });
+        }
+
+        private static void RegisterBus(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton<IConnection>(sp =>
+            {
+                var factory = new ConnectionFactory
+                {
+                    HostName = configuration["RabbitMq:Host"],
+                    Port = int.Parse(configuration["RabbitMq:Port"]),
+                    UserName = configuration["RabbitMq:User"],
+                    Password = configuration["RabbitMq:Password"],
+                    VirtualHost = configuration["RabbitMq:VirtualHost"]
+
+                };
+
+                return factory.CreateConnection();
+            });
+
+        }
+
+        private static void RegisterPublishers(IServiceCollection services)
+        {
+            services.AddScoped<IPedidoPublisher, PedidoPublisher>();
         }
     }
 }

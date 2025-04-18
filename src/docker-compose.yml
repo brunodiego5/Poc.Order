@@ -9,11 +9,18 @@ services:
     ports:
       - "8080:8080"
     environment:
-      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_ENVIRONMENT: Development
+
+      # MongoDB
       MongoDb__ConnectionString: "mongodb://root:root123@mongo:27017/?authSource=admin"
-      MongoDb__Database: "PocOrder"
+      MongoDb__Database: PocOrder
+
+      # RabbitMQ (ajuste se usar outro formato de config na sua app)
+      RabbitMq__Connection: "amqp://guest:guest@rabbitmq:5672/"
+
     depends_on:
       - mongo
+      - rabbitmq
 
   mongo:
     image: mongo:6
@@ -38,6 +45,21 @@ services:
       ME_CONFIG_BASICAUTH_PASSWORD: root123
     depends_on:
       - mongo
+
+  rabbitmq:
+    image: rabbitmq:3-management               # inclui UI
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"     # protocolo AMQP
+      - "15672:15672"   # console web http://localhost:15672 (guest/guest)
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
 volumes:
   mongo_data:

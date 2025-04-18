@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Poc.Order.Api.Application.Commands.CreatePedido;
@@ -16,6 +17,7 @@ namespace Poc.Order.Api.Test.Poc.Order.Api.Application.Test.Commands.CreatePedid
         private readonly Mock<IValidator<CreatePedidoCommand>> validator;
         private readonly Mock<IMapper> mapper;
         private readonly Mock<ILogger<CreatePedidoCommandHandler>> logger;
+        private readonly Mock<IMediator> mediator;
 
         public CreatePedidoCommandHandlerTests()
         {
@@ -23,6 +25,7 @@ namespace Poc.Order.Api.Test.Poc.Order.Api.Application.Test.Commands.CreatePedid
             validator = new Mock<IValidator<CreatePedidoCommand>>();
             mapper = new Mock<IMapper>();
             logger = new Mock<ILogger<CreatePedidoCommandHandler>>();
+            mediator = new Mock<IMediator>();
         }
 
         [Fact]
@@ -51,12 +54,9 @@ namespace Poc.Order.Api.Test.Poc.Order.Api.Application.Test.Commands.CreatePedid
             mapper.Setup(m => m.Map<Pedido>(command))
                 .Returns(pedido);
 
-            var handler = new CreatePedidoCommandHandler(pedidoRepository.Object, validator.Object, mapper.Object, logger.Object);
-
-
+            var handler = new CreatePedidoCommandHandler(pedidoRepository.Object, validator.Object, mapper.Object, logger.Object, mediator.Object);
 
             var response = await handler.Handle(command, default(CancellationToken));
-
 
             Assert.Equal(command.PedidoId, response.Id);
             Assert.Equal(StatusPedido.Criado, response.Status);
@@ -77,7 +77,7 @@ namespace Poc.Order.Api.Test.Poc.Order.Api.Application.Test.Commands.CreatePedid
                     new ValidationFailure("ClientId", "Cliente é obrigatório")
                 }));
 
-            var handler = new CreatePedidoCommandHandler(pedidoRepository.Object, validator.Object, mapper.Object, logger.Object);
+            var handler = new CreatePedidoCommandHandler(pedidoRepository.Object, validator.Object, mapper.Object, logger.Object, mediator.Object);
 
             var response = await handler.Handle(command, default(CancellationToken));
 
