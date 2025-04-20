@@ -22,6 +22,21 @@ services:
       - mongo
       - rabbitmq
 
+  processor:
+    build:
+      context: .
+      dockerfile: Poc.Order.Processor/Dockerfile
+    container_name: poc_order_processor
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+
+      # RabbitMQ (ajuste se usar outro formato de config na sua app)
+      RabbitMq__Connection: "amqp://guest:guest@rabbitmq:5672/"
+
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
   mongo:
     image: mongo:6
     container_name: mongo
