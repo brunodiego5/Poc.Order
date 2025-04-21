@@ -1,8 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+//using Microsoft.FeatureManagement;
+using RabbitMQ.Client;
 using Poc.Order.Processor.Domain.Interfaces;
 using Poc.Order.Processor.Subscriber.Subscribers;
-using RabbitMQ.Client;
+using Microsoft.FeatureManagement;
+using Poc.Order.Processor.Domain.DomainServices.Strategies;
+using Poc.Order.Processor.Domain.DomainServices;
 
 namespace Poc.Order.Api.IoC
 {
@@ -14,6 +18,8 @@ namespace Poc.Order.Api.IoC
             RegisterMediatRs(services);
             RegisterBus(services, configuration);
             RegisterSubscribers(services);
+            RegisterExtensions(services);
+            RegisterDomainServices(services);
         }
 
         private static void RegisterMappers(IServiceCollection services)
@@ -55,6 +61,18 @@ namespace Poc.Order.Api.IoC
         private static void RegisterSubscribers(IServiceCollection services)
         {
             services.AddScoped<IPedidoSubscriber, PedidoSubscriber>();
+        }
+
+        private static void RegisterExtensions(IServiceCollection services)
+        {
+            services.AddFeatureManagement();
+        }
+
+        private static void RegisterDomainServices(IServiceCollection services)
+        {
+            services.AddScoped<IPedidoImpostoStrategy, ImpostoAtualStrategy>();
+            services.AddScoped<IPedidoImpostoStrategy, ImpostoReformaStrategy>();
+            services.AddScoped<IPedidoDomainService, PedidoDomainService>();
         }
     }
 }
