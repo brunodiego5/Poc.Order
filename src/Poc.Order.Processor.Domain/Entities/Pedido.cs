@@ -5,6 +5,8 @@
 	{
         public int PedidoId { get; set; }
 
+        public decimal Imposto { get; set; }
+
         public required IList<ItemPedido> Itens { get; set; }
 	}
 

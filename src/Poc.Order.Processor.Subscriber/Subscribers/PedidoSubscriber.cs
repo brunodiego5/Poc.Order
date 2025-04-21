@@ -38,6 +38,7 @@ namespace Poc.Order.Processor.Subscriber.Subscribers
         public Task ConsumePedido(CancellationToken cancellationToken)
         {
             PedidoMessage message = null;
+            var enviouImposto = false;
 
             var consumer = new EventingBasicConsumer(model);
             consumer.Received += async (model, ea) =>
@@ -55,11 +56,14 @@ namespace Poc.Order.Processor.Subscriber.Subscribers
 
                     var command = mapper.Map<CalcularPedidoCommand>(message);
 
-                    var result = await mediator.Send(command, cancellationToken);
+                    enviouImposto = await mediator.Send(command, cancellationToken);
+
+                    logger.LogInformation($"Pedido processado com sucesso: {enviouImposto}. CorrelationId {message?.CorrelationId}.");
                 }
                 catch (Exception ex)
                 {
-                    logger.LogInformation(ex, $"Erro ao receber pedido. CorrelationId {message?.CorrelationId}.");
+                    logger.LogInformation(ex, $"Erro ao processar pedido. CorrelationId {message?.CorrelationId}.");
+                    enviouImposto = false;
                 }
             };
 

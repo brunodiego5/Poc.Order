@@ -2,7 +2,7 @@
 
 namespace Poc.Order.Api.Application.Commands.UpdateImpostoPedido
 {
-    public class UpdateImpostoPedidoCommand : IRequest<Unit>
+    public class UpdateImpostoPedidoCommand : IRequest<UpdateImpostoPedidoCommandResponse>
     {
         public string CorrelationId { get; set; }
 
