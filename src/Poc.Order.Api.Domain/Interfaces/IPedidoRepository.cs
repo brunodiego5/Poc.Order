@@ -11,6 +11,6 @@ namespace Poc.Order.Api.Domain.Interfaces
 
         Task<IList<Pedido>> GetPedidosByStatusAsync(StatusPedido statusPedido, CancellationToken cancellationToken);
 
-        Task UpdateImpostoPedidoAsync(int id, double imposto, CancellationToken cancellationToken);
+        Task UpdateImpostoPedidoAsync(int id, decimal imposto, CancellationToken cancellationToken);
     }
 }

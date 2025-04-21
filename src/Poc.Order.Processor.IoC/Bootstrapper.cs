@@ -7,6 +7,8 @@ using Poc.Order.Processor.Subscriber.Subscribers;
 using Microsoft.FeatureManagement;
 using Poc.Order.Processor.Domain.DomainServices.Strategies;
 using Poc.Order.Processor.Domain.DomainServices;
+using Poc.Order.Processor.Subscriber.Profiles;
+using Poc.Order.Processor.Application.Commands.CalcularPedido;
 
 namespace Poc.Order.Api.IoC
 {
@@ -24,19 +26,19 @@ namespace Poc.Order.Api.IoC
 
         private static void RegisterMappers(IServiceCollection services)
         {
-            //services.AddAutoMapper(
-            //    typeof(CreatePedidoCommandToPedidoProfile).Assembly,
+            services.AddAutoMapper(
+                typeof(PedidoMessageToCalcularPedidoCommandProfile).Assembly
             //    typeof(PedidoToPedidoModelProfile).Assembly,
             //    typeof(PedidoToPedidoMessageProfile).Assembly
-            //);
+            );
         }
 
         private static void RegisterMediatRs(IServiceCollection services)
         {
-            //services.AddMediatR(cfg =>
-            //{
-            //    cfg.RegisterServicesFromAssembly(typeof(CreatePedidoCommandHandler).Assembly);
-            //});
+            services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssembly(typeof(CalcularPedidoCommandHandler).Assembly);
+            });
         }
 
         private static void RegisterBus(IServiceCollection services, IConfiguration configuration)

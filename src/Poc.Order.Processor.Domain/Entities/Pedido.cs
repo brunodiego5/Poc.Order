@@ -1,25 +1,12 @@
-﻿using Poc.Order.Processor.Domain.Enums;
-
-namespace Poc.Order.Processor.Domain.Entities
+﻿namespace Poc.Order.Processor.Domain.Entities
 {
 
 	public class Pedido
 	{
-
         public int PedidoId { get; set; }
 
-		public int ClientId { get; set; }
-
-		public double Imposto { get; set; }
-
         public required IList<ItemPedido> Itens { get; set; }
-
-		public StatusPedido Status { get; set; } = StatusPedido.Criado;
-        
-		public Pedido()
-        {
-        }
 	}
 
-	public record ItemPedido(int ProdutoId, double Quantidade, double Valor);
+	public record ItemPedido(decimal Quantidade, decimal Valor);
 }

@@ -14,12 +14,12 @@ namespace Poc.Order.Api.Infrastructure.Data.Models
 
         public int ClientId { get; set; }
 
-        public double Imposto { get; set; }
+        public decimal Imposto { get; set; }
 
         public required IList<ItemPedidoModel> Itens { get; set; }
 
         public StatusPedido Status { get; set; }
     }
 
-    public record ItemPedidoModel(int ProdutoId, double Quantidade, double Valor);
+    public record ItemPedidoModel(int ProdutoId, decimal Quantidade, decimal Valor);
 }
