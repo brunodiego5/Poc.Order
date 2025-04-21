@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Poc.Order.Api.Domain.Entities;
 using Poc.Order.Api.Domain.Interfaces;
 using Poc.Order.Api.Infrastructure.Publisher.Messages;
 using RabbitMQ.Client;
+using System.Text;
 using System.Text.Json;
 
 namespace Poc.Order.Api.Infrastructure.Publisher.Publishers
@@ -14,11 +16,13 @@ namespace Poc.Order.Api.Infrastructure.Publisher.Publishers
         private readonly IConnection connection;
         private readonly IModel model;
         private readonly IMapper mapper;
+        private readonly ILogger<PedidoPublisher> logger;
 
-        public PedidoPublisher(IConnection connection, IMapper mapper)
+        public PedidoPublisher(IConnection connection, IMapper mapper, ILogger<PedidoPublisher> logger)
         {
             this.mapper = mapper;
             this.connection = connection;
+            this.logger = logger;
             this.model = connection.CreateModel();
 
             model.ExchangeDeclare(Exchange, ExchangeType.Direct, durable: true);
@@ -30,6 +34,8 @@ namespace Poc.Order.Api.Infrastructure.Publisher.Publishers
             message.CorrelationId = correlationId;
 
             var body = JsonSerializer.SerializeToUtf8Bytes(message);
+
+            logger.LogDebug($"Json Pedido enviado {Encoding.UTF8.GetString(body) ?? string.Empty}. CorrelationId {message?.CorrelationId}.");
 
             model.BasicPublish(
                 exchange: Exchange,

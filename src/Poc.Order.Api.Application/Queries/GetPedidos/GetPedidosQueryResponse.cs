@@ -10,12 +10,12 @@ namespace Poc.Order.Api.Application.Queries.GetPedidos
 
         public int ClientId { get; set; }
 
-        public double Imposto { get; set; }
+        public decimal Imposto { get; set; }
 
         public required IList<ItemPedidosQuery> Itens { get; set; }
 
         public StatusPedido Status { get; set; }
     }
 
-    public record ItemPedidosQuery(int ProdutoId, double Quantidade, double Valor);
+    public record ItemPedidosQuery(int ProdutoId, decimal Quantidade, decimal Valor);
 }

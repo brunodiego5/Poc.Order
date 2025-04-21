@@ -10,7 +10,7 @@ namespace Poc.Order.Api.Domain.Entities
 
 		public int ClientId { get; set; }
 
-		public double Imposto { get; set; }
+		public decimal Imposto { get; set; }
 
         public required IList<ItemPedido> Itens { get; set; }
 
@@ -21,5 +21,5 @@ namespace Poc.Order.Api.Domain.Entities
         }
 	}
 
-	public record ItemPedido(int ProdutoId, double Quantidade, double Valor);
+	public record ItemPedido(int ProdutoId, decimal Quantidade, decimal Valor);
 }

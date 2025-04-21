@@ -11,5 +11,5 @@ namespace Poc.Order.Api.Application.Commands.CreatePedido
         public required IList<ItemPedidoCommand> Itens { get; set; }
     }
 
-    public record ItemPedidoCommand(int ProdutoId, double Quantidade, double Valor);
+    public record ItemPedidoCommand(int ProdutoId, decimal Quantidade, decimal Valor);
 }
