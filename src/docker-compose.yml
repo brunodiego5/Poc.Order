@@ -33,9 +33,14 @@ services:
       # RabbitMQ (ajuste se usar outro formato de config na sua app)
       RabbitMq__Connection: "amqp://guest:guest@rabbitmq:5672/"
 
+      ServicosExternos__Pedidos__BaseUrl: "http://api:8080/"
+
     depends_on:
       rabbitmq:
         condition: service_healthy
+      api:
+        condition: service_started
+
 
   mongo:
     image: mongo:6

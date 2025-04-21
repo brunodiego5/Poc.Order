@@ -57,6 +57,9 @@ namespace Poc.Order.Api.Controllers
         {
             var result = await mediator.Send(command);
 
+            if (result?.Status == StatusPedido.Cancelado)
+                return BadRequest(result);
+
             return Ok(result);
         }
     }

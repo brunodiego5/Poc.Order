@@ -1,11 +1,12 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Poc.Order.Api.Domain.Enums;
 using Poc.Order.Api.Domain.Interfaces;
 
 namespace Poc.Order.Api.Application.Commands.UpdateImpostoPedido
 {
-    public class UpdateImpostoPedidoCommandHandler : IRequestHandler<UpdateImpostoPedidoCommand, Unit>
+    public class UpdateImpostoPedidoCommandHandler : IRequestHandler<UpdateImpostoPedidoCommand, UpdateImpostoPedidoCommandResponse>
     {
         private readonly IPedidoRepository pedidoRepository;
         private readonly IValidator<UpdateImpostoPedidoCommand> validator;
@@ -21,9 +22,11 @@ namespace Poc.Order.Api.Application.Commands.UpdateImpostoPedido
             this.logger = logger;
         }
 
-        public async Task<Unit> Handle(UpdateImpostoPedidoCommand request, CancellationToken cancellationToken)
+        public async Task<UpdateImpostoPedidoCommandResponse> Handle(UpdateImpostoPedidoCommand request, CancellationToken cancellationToken)
         {
             logger.LogInformation($"Recebemos o pedido {request?.PedidoId} e imposto {request?.Imposto}. CorrelationId: {request?.CorrelationId}");
+
+            var response = new UpdateImpostoPedidoCommandResponse() { Id = request.PedidoId };
 
             try
             {
@@ -36,13 +39,16 @@ namespace Poc.Order.Api.Application.Commands.UpdateImpostoPedido
                 await pedidoRepository.UpdateImpostoPedidoAsync(request.PedidoId, request.Imposto, cancellationToken);
                 logger.LogInformation($"Imposto do pedido atualizado. CorrelationId: {request?.CorrelationId}");
 
+                response.Status = StatusPedido.Concluido;
+
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, $"Erro ao atualizar imposto do pedido. CorrelationId: {request?.CorrelationId}");
+                response.Status = StatusPedido.Cancelado;
             }
 
-            return Unit.Value;
+            return await Task.FromResult(response);
         }
     }
 }
