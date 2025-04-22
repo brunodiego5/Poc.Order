@@ -90,7 +90,7 @@ Você pode testar os endpoints da API após subir a aplicação com Docker (ver 
   "status": "Criado"
 }
 ```
-#### Consultar pedido por ID
+#### Consultar pedido por PedidoId
 
 **GET** `/api/pedido/1`
 
@@ -113,7 +113,27 @@ Você pode testar os endpoints da API após subir a aplicação com Docker (ver 
 ```
 #### Listar pedidos filtrando por status
 
-**GET** `/api/pedido?status=Criado`
+**GET** `/api/pedido?status=Concluido`
+
+**Response:**
+
+```json
+[
+  {
+    "pedidoId": 1,
+    "clientId": 1,
+    "imposto": 7.2,
+    "itens": [
+      {
+        "produtoId": 1,
+        "quantidade": 3,
+        "valor": 8
+      }
+    ],
+    "status": "Concluido"
+  }
+]
+```
 
 
 ### Próximos passos
@@ -121,3 +141,4 @@ Você pode testar os endpoints da API após subir a aplicação com Docker (ver 
 - Implementar **rediness probe**
 - Implementar fila para publicação dos resultados processados (Comunicação assíncrona com sistemas externos)
 - Implementar notificação das validações em application para presentation
+- Implementar para aplicação criar index no campo pedidoId da collection pedidos

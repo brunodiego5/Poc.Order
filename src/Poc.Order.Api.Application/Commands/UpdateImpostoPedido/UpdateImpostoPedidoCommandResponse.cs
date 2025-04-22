@@ -4,7 +4,7 @@ namespace Poc.Order.Api.Application.Commands.UpdateImpostoPedido
 {
     public class UpdateImpostoPedidoCommandResponse
     {
-        public int Id { get; set; }
+        public int PedidoId { get; set; }
 
         public StatusPedido Status { get; set; }
     }

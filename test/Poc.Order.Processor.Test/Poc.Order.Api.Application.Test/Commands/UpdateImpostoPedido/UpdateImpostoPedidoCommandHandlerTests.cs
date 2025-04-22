@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.Results;
-using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Poc.Order.Api.Application.Commands.UpdateImpostoPedido;
@@ -34,7 +32,7 @@ namespace Poc.Order.Api.Test.Poc.Order.Api.Application.Test.Commands.UpdateImpos
 
             var expectedResponse = new UpdateImpostoPedidoCommandResponse()
             {
-                Id = 1,
+                PedidoId = 1,
                 Status = StatusPedido.Concluido
             };
 
@@ -48,7 +46,7 @@ namespace Poc.Order.Api.Test.Poc.Order.Api.Application.Test.Commands.UpdateImpos
 
             var response = await handler.Handle(command, default(CancellationToken));
 
-            Assert.Equal(expectedResponse.Id, response.Id);
+            Assert.Equal(expectedResponse.PedidoId, response.PedidoId);
             Assert.Equal(expectedResponse.Status, response.Status);
             pedidoRepository.Verify(v => v.UpdateImpostoPedidoAsync(command.PedidoId, command.Imposto, default(CancellationToken)),
                 Times.Once());
@@ -65,7 +63,7 @@ namespace Poc.Order.Api.Test.Poc.Order.Api.Application.Test.Commands.UpdateImpos
 
             var expectedResponse = new UpdateImpostoPedidoCommandResponse()
             {
-                Id = 1,
+                PedidoId = 1,
                 Status = StatusPedido.Cancelado
             };
 
@@ -79,7 +77,7 @@ namespace Poc.Order.Api.Test.Poc.Order.Api.Application.Test.Commands.UpdateImpos
 
             var response = await handler.Handle(command, default(CancellationToken));
 
-            Assert.Equal(expectedResponse.Id, response.Id);
+            Assert.Equal(expectedResponse.PedidoId, response.PedidoId);
             Assert.Equal(expectedResponse.Status, response.Status);
             pedidoRepository.Verify(v => v.UpdateImpostoPedidoAsync(command.PedidoId, command.Imposto, default(CancellationToken)),
                 Times.Never());
