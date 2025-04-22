@@ -1,0 +1,85 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Poc.Order.Api/Dockerfile
+    container_name: poc_order_api
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+
+      # MongoDB
+      MongoDb__ConnectionString: "mongodb://root:root123@mongo:27017/?authSource=admin"
+      MongoDb__Database: PocOrder
+
+      # RabbitMQ (ajuste se usar outro formato de config na sua app)
+      RabbitMq__Connection: "amqp://guest:guest@rabbitmq:5672/"
+
+    depends_on:
+      - mongo
+      - rabbitmq
+
+  processor:
+    build:
+      context: .
+      dockerfile: Poc.Order.Processor/Dockerfile
+    container_name: poc_order_processor
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+
+      # RabbitMQ (ajuste se usar outro formato de config na sua app)
+      RabbitMq__Connection: "amqp://guest:guest@rabbitmq:5672/"
+
+      ServicosExternos__Pedidos__BaseUrl: "http://api:8080/"
+
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      api:
+        condition: service_started
+
+
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    command: ["--bind_ip_all"]
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root123
+    volumes:
+      - mongo_data:/data/db
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_URL: "mongodb://root:root123@mongo:27017/?authSource=admin"
+      ME_CONFIG_BASICAUTH_USERNAME: root
+      ME_CONFIG_BASICAUTH_PASSWORD: root123
+    depends_on:
+      - mongo
+
+  rabbitmq:
+    image: rabbitmq:3-management               # inclui UI
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"     # protocolo AMQP
+      - "15672:15672"   # console web http://localhost:15672 (guest/guest)
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  mongo_data:

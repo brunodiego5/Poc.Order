@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Poc.Order.Processor": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
