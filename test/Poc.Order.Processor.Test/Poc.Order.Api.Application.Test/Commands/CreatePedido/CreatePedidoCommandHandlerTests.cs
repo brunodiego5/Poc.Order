@@ -58,7 +58,7 @@ namespace Poc.Order.Api.Test.Poc.Order.Api.Application.Test.Commands.CreatePedid
 
             var response = await handler.Handle(command, default(CancellationToken));
 
-            Assert.Equal(command.PedidoId, response.Id);
+            Assert.Equal(command.PedidoId, response.PedidoId);
             Assert.Equal(StatusPedido.Criado, response.Status);
         }
 

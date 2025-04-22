@@ -4,8 +4,6 @@ namespace Poc.Order.Api.Application.Queries.GetPedidos
 {
     public class GetPedidosQueryResponse
     {
-        public string Id { get; set; }
-
         public int PedidoId { get; set; }
 
         public int ClientId { get; set; }

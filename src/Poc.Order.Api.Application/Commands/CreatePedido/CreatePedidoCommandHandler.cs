@@ -39,7 +39,7 @@ namespace Poc.Order.Api.Application.Commands.CreatePedido
 
             var response = new CreatePedidoCommandResponse()
             {
-                Id = request.PedidoId
+                PedidoId = request.PedidoId
             };
 
             try

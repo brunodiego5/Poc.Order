@@ -26,7 +26,7 @@ namespace Poc.Order.Api.Application.Commands.UpdateImpostoPedido
         {
             logger.LogInformation($"Recebemos o pedido {request?.PedidoId} e imposto {request?.Imposto}. CorrelationId: {request?.CorrelationId}");
 
-            var response = new UpdateImpostoPedidoCommandResponse() { Id = request.PedidoId };
+            var response = new UpdateImpostoPedidoCommandResponse() { PedidoId = request.PedidoId };
 
             try
             {

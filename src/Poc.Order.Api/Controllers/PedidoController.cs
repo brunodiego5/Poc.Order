@@ -30,10 +30,10 @@ namespace Poc.Order.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetOne(int id)
+        [HttpGet("{pedidoId:int}")]
+        public async Task<IActionResult> GetOne(int pedidoId)
         {
-            var result = await mediator.Send(new GetOnePedidoQuery { PedidoId = id});
+            var result = await mediator.Send(new GetOnePedidoQuery { PedidoId = pedidoId });
 
             if (result is null)
                 return NotFound();

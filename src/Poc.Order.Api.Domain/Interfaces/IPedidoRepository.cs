@@ -7,10 +7,10 @@ namespace Poc.Order.Api.Domain.Interfaces
     {
         Task AddPedidoAsync(Pedido pedido, CancellationToken cancellationToken);
 
-        Task<Pedido> GetPedidoByIdAsync(int id, CancellationToken cancellationToken);
+        Task<Pedido> GetPedidoByIdAsync(int pedidoId, CancellationToken cancellationToken);
 
         Task<IList<Pedido>> GetPedidosByStatusAsync(StatusPedido statusPedido, CancellationToken cancellationToken);
 
-        Task UpdateImpostoPedidoAsync(int id, decimal imposto, CancellationToken cancellationToken);
+        Task UpdateImpostoPedidoAsync(int pedidoId, decimal imposto, CancellationToken cancellationToken);
     }
 }

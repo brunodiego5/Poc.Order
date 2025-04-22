@@ -27,9 +27,9 @@ namespace Poc.Order.Api.Infrastructure.Data.Repositories
             await collection.InsertOneAsync(pedidoModel);
         }
 
-        public async Task<Pedido> GetPedidoByIdAsync(int id, CancellationToken cancellationToken)
+        public async Task<Pedido> GetPedidoByIdAsync(int pedidoId, CancellationToken cancellationToken)
         {
-            var pedidoModel = await collection.Find(w => w.PedidoId == id).FirstOrDefaultAsync(cancellationToken);
+            var pedidoModel = await collection.Find(w => w.PedidoId == pedidoId).FirstOrDefaultAsync(cancellationToken);
 
             return mapper.Map<Pedido>(pedidoModel);
         }
@@ -41,9 +41,9 @@ namespace Poc.Order.Api.Infrastructure.Data.Repositories
             return mapper.Map<List<Pedido>>(listPedidoModel);
         }
 
-        public async Task UpdateImpostoPedidoAsync(int id, decimal imposto, CancellationToken cancellationToken)
+        public async Task UpdateImpostoPedidoAsync(int pedidoId, decimal imposto, CancellationToken cancellationToken)
         {
-            var filtro = Builders<PedidoModel>.Filter.Eq(p => p.PedidoId, id);
+            var filtro = Builders<PedidoModel>.Filter.Eq(p => p.PedidoId, pedidoId);
             var update = Builders<PedidoModel>.Update
                 .Set(p => p.Imposto, imposto)
                 .Set(p => p.Status, StatusPedido.Concluido);

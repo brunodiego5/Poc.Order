@@ -4,7 +4,7 @@ namespace Poc.Order.Api.Application.Commands.CreatePedido
 {
     public class CreatePedidoCommandResponse
     {
-        public int Id { get; set; }
+        public int PedidoId { get; set; }
 
         public StatusPedido Status { get; set; }
     }
