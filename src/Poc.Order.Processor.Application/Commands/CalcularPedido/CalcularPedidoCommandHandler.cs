@@ -51,10 +51,10 @@ namespace Poc.Order.Processor.Application.Commands.CalcularPedido
             {
                 logger.LogError(ex, $"Error ao calcular o pedido. CorrelationId {request?.CorrelationId}.");
 
-                return await Task.FromResult<bool>(false);
+                return false;
             }
 
-            return await Task.FromResult<bool>(enviouImposto);
+            return enviouImposto;
         }
     }
 }
