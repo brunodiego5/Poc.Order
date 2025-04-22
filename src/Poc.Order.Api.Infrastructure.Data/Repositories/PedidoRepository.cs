@@ -15,7 +15,6 @@ namespace Poc.Order.Api.Infrastructure.Data.Repositories
 
         public PedidoRepository(IMongoClient client, IConfiguration configuration, IMapper mapper)
         {
-            Console.WriteLine(configuration["MongoDb:Database"]);
             var database = client.GetDatabase(configuration["MongoDb:Database"]);
             collection = database.GetCollection<PedidoModel>("pedidos");
 
