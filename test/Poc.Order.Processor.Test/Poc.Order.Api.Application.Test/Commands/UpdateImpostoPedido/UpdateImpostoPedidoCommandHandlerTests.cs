@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Poc.Order.Api.Application.Commands.UpdateImpostoPedido;
+using Poc.Order.Api.Domain.Enums;
 using Poc.Order.Api.Domain.Interfaces;
 
 namespace Poc.Order.Api.Test.Poc.Order.Api.Application.Test.Commands.UpdateImpostoPedido
@@ -30,7 +31,13 @@ namespace Poc.Order.Api.Test.Poc.Order.Api.Application.Test.Commands.UpdateImpos
                 PedidoId = 1,
                 Imposto = 10
             };
-            
+
+            var expectedResponse = new UpdateImpostoPedidoCommandResponse()
+            {
+                Id = 1,
+                Status = StatusPedido.Concluido
+            };
+
             pedidoRepository.Setup(r => r.UpdateImpostoPedidoAsync(command.PedidoId, command.Imposto, default(CancellationToken)))
                 .Returns(Task.CompletedTask);
 
@@ -41,7 +48,8 @@ namespace Poc.Order.Api.Test.Poc.Order.Api.Application.Test.Commands.UpdateImpos
 
             var response = await handler.Handle(command, default(CancellationToken));
 
-            Assert.Equal(Unit.Value, response);
+            Assert.Equal(expectedResponse.Id, response.Id);
+            Assert.Equal(expectedResponse.Status, response.Status);
             pedidoRepository.Verify(v => v.UpdateImpostoPedidoAsync(command.PedidoId, command.Imposto, default(CancellationToken)),
                 Times.Once());
         }
@@ -55,6 +63,12 @@ namespace Poc.Order.Api.Test.Poc.Order.Api.Application.Test.Commands.UpdateImpos
                 Imposto = -1
             };
 
+            var expectedResponse = new UpdateImpostoPedidoCommandResponse()
+            {
+                Id = 1,
+                Status = StatusPedido.Cancelado
+            };
+
             validator.Setup(v => v.Validate(command))
                 .Returns(new ValidationResult(new List<ValidationFailure>
                 { 
@@ -65,7 +79,8 @@ namespace Poc.Order.Api.Test.Poc.Order.Api.Application.Test.Commands.UpdateImpos
 
             var response = await handler.Handle(command, default(CancellationToken));
 
-            Assert.Equal(Unit.Value, response);
+            Assert.Equal(expectedResponse.Id, response.Id);
+            Assert.Equal(expectedResponse.Status, response.Status);
             pedidoRepository.Verify(v => v.UpdateImpostoPedidoAsync(command.PedidoId, command.Imposto, default(CancellationToken)),
                 Times.Never());
         }
